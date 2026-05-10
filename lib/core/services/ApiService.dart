@@ -79,6 +79,8 @@ class ApiService {
     print('\x1B[34mBODY: ${jsonEncode(body)}\x1B[0m'); // Blue color for body
   }
 
+
+
   // Log response with color coding
   void _logResponse(http.Response response) {
     print('\x1B[31mRESPONSE CODE: ${response.statusCode}\x1B[0m'); // Red color for response code

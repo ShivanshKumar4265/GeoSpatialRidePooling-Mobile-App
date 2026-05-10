@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geo_spatial_ride_pooling_system_2/core/constant/ImageConstant.dart';
 
 import '../../../core/utils/custom_text.dart';
 import '../../../shared/AppColors.dart';
+import '../setvice/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class EmailVerificationPage extends StatefulWidget {
@@ -14,6 +18,8 @@ class EmailVerificationPage extends StatefulWidget {
 }
 
 class _EmailVerificationPageState extends State<EmailVerificationPage> {
+  final AuthService _authService = AuthService.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +84,9 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: InkWell(
-                              onTap: () {},
+                              onTap: ()  {
+                                _verifyEmail();
+                              },
                               borderRadius: BorderRadius.circular(12),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -174,4 +182,89 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       ),
     );
   }
-}
+
+  Future<void> _verifyEmail() async {
+    try {
+      final user = await _authService.signInWithGoogle();
+
+      log("==================================");
+      log("USER OBJECT: $user");
+      log("==================================");
+
+      if (user != null) {
+        log("UID: ${user.uid}");
+        log("DISPLAY NAME: ${user.displayName}");
+        log("EMAIL: ${user.email}");
+        log("PHONE NUMBER: ${user.phoneNumber}");
+        log("PHOTO URL: ${user.photoURL}");
+        log("EMAIL VERIFIED: ${user.emailVerified}");
+        log("IS ANONYMOUS: ${user.isAnonymous}");
+        log("TENANT ID: ${user.tenantId}");
+        log("REFRESH TOKEN: ${user.refreshToken}");
+
+        log(
+          "CREATION TIME: ${user.metadata.creationTime}",
+        );
+
+        log(
+          "LAST SIGN IN TIME: ${user.metadata.lastSignInTime}",
+        );
+
+        for (var provider in user.providerData) {
+          log("------------ PROVIDER ------------");
+          log("PROVIDER ID: ${provider.providerId}");
+          log("PROVIDER UID: ${provider.uid}");
+          log("NAME: ${provider.displayName}");
+          log("EMAIL: ${provider.email}");
+          log("PHONE: ${provider.phoneNumber}");
+          log("PHOTO URL: ${provider.photoURL}");
+        }
+
+        final token = await user.getIdToken();
+
+        log("ID TOKEN: $token");
+
+        log("==================================");
+      }
+
+      if (!mounted) return;
+
+      if (user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Welcome ${user.email}',
+            ),
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      log("FirebaseAuthException");
+      log("CODE: ${e.code}");
+      log("MESSAGE: ${e.message}");
+      log("STACKTRACE: ${e.stackTrace}");
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.message ?? 'Authentication failed',
+          ),
+        ),
+      );
+    } catch (e, stackTrace) {
+      log("GENERAL ERROR: $e");
+      log("STACKTRACE: $stackTrace");
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
+          ),
+        ),
+      );
+    }
+  }}
