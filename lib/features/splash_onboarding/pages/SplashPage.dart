@@ -7,6 +7,7 @@ import 'package:geo_spatial_ride_pooling_system_2/core/constant/ImageConstant.da
 import '../../../DummyPage.dart';
 import '../../../core/utils/custom_text.dart';
 import '../../../shared/AppColors.dart';
+import 'OnboardingPage.dart';
 
 
 class Splashpage extends StatefulWidget {
@@ -24,7 +25,7 @@ class _SplashpageState extends State<Splashpage> {
     Timer(const Duration(seconds: 3), () {
       // Replace 'NextScreen()' with your actual home or login widget
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Dummypage()),
+        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
       );
     });
   }
