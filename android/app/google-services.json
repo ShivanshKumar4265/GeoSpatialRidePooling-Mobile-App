@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "669858546192",
+    "project_id": "geospatial-commute-sharing-app",
+    "storage_bucket": "geospatial-commute-sharing-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669858546192:android:46fb4240e5897e4d5cc095",
+        "android_client_info": {
+          "package_name": "com.example.geo_spatial_ride_pooling_system_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669858546192-tt4pq3hpbiki6r19jir81hfqio3kbs66.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.geo_spatial_ride_pooling_system_2",
+            "certificate_hash": "9033744543cfcd8d7325b6f62e326f6f8bd0712b"
+          }
+        },
+        {
+          "client_id": "669858546192-3lnmjr5d8n7r9re5dr81m8ou4naptg9r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt_7xPZzr_KVJSTAdGts2MMXmlE-T7dXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "669858546192-3lnmjr5d8n7r9re5dr81m8ou4naptg9r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "669858546192-r6fgd7t10fpi49rp7e412h5ag3toukuh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.geoSpatialRidePoolingSystem2"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
