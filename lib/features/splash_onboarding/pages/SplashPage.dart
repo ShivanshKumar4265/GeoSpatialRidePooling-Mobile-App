@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geo_spatial_ride_pooling_system_2/core/constant/ImageConstant.dart';
+import 'package:geo_spatial_ride_pooling_system_2/core/constant/shared_pref_constant.dart';
+import 'package:geo_spatial_ride_pooling_system_2/core/utils/shared_pref_util.dart';
+import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/Pages/SignInPage.dart';
 
 import '../../../DummyPage.dart';
 import '../../../core/utils/custom_text.dart';
+import '../../../core/utils/log.dart';
 import '../../../shared/AppColors.dart';
 import 'OnboardingPage.dart';
 
@@ -23,10 +27,8 @@ class _SplashpageState extends State<Splashpage> {
     super.initState();
     // Timer to transition after 3 seconds
     Timer(const Duration(seconds: 3), () {
-      // Replace 'NextScreen()' with your actual home or login widget
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
-      );
+
+      _navigateBasedOnboardingStatus();
     });
   }
 
@@ -118,6 +120,29 @@ class _SplashpageState extends State<Splashpage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _navigateBasedOnboardingStatus() async {
+
+    bool isFirstTime =
+        await SharedPreferencesUtil.instance
+        .getBoolData(SharedPrefConstant.isFirstTime) ?? true;
+    mylog("Is First Time : ${isFirstTime}");
+
+    if (isFirstTime) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const OnboardingScreen(),
+        ),
+      );
+      return;
+    }
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => SignInPage(),
       ),
     );
   }

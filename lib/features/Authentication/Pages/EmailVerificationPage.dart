@@ -5,7 +5,7 @@ import 'package:geo_spatial_ride_pooling_system_2/core/constant/ImageConstant.da
 import '../../../core/utils/custom_text.dart';
 import '../../../core/utils/log.dart';
 import '../../../shared/AppColors.dart';
-import '../setvice/auth_service.dart';
+import '../service/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'SignInPage.dart';

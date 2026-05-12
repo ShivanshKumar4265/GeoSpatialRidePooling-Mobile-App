@@ -28,9 +28,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      // home: const Splashpage(),
+      home: const Splashpage(),
       // home: const SignInPage(),
-      home: const CreatePasswordScreen(),
+      // home: const CreatePasswordScreen(),
     );
   }
 }
