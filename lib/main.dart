@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'features/Authentication/Pages/CreatePasswordPage.dart';
+import 'features/Authentication/Pages/SignInPage.dart';
 import 'features/splash_onboarding/pages/SplashPage.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +28,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const Splashpage(),
+      // home: const Splashpage(),
+      // home: const SignInPage(),
+      home: const CreatePasswordScreen(),
     );
   }
 }

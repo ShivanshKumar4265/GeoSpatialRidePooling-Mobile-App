@@ -62,29 +62,6 @@ class AuthService {
           message: 'Email not verified',
         );
       }
-
-      // OPTIONAL:
-      // Corporate email validation
-      /*
-      const allowedDomains = [
-        "@company.com",
-        "@gmail.com",
-      ];
-
-      final isAllowed = allowedDomains.any(
-        (domain) => user.email!.endsWith(domain),
-      );
-
-      if (!isAllowed) {
-        await signOut();
-
-        throw FirebaseAuthException(
-          code: 'invalid-domain',
-          message: 'Use your corporate email',
-        );
-      }
-      */
-
       return user;
     } on FirebaseAuthException {
       rethrow;

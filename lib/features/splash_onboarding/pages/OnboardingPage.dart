@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geo_spatial_ride_pooling_system_2/core/constant/ImageConstant.dart';
 
-import '../../../core/utils/SnackbarUtil.dart';
 import '../../../core/utils/custom_text.dart';
 import '../../../shared/AppColors.dart';
 import '../../Authentication/Pages/EmailVerificationPage.dart';
@@ -28,7 +27,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   // Icon (SVG) - Plain green as per image
                   SvgPicture.asset(
-                    ImageConstant.google_icon, // Ensure path is correct
+                    ImageConstant.logo, // Ensure path is correct
                     height: 80,
                     width: 80,
                     colorFilter: const ColorFilter.mode(

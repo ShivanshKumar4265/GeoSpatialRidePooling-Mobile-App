@@ -1,14 +1,14 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geo_spatial_ride_pooling_system_2/core/constant/ImageConstant.dart';
-
 import '../../../core/utils/custom_text.dart';
+import '../../../core/utils/log.dart';
 import '../../../shared/AppColors.dart';
 import '../setvice/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'SignInPage.dart';
 
 class EmailVerificationPage extends StatefulWidget {
   const EmailVerificationPage({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       backgroundColor: AppColors.white,
       body: Stack(
         children: [
-          // Background Image (The road rays effect)
+          // Background Image
           Positioned.fill(
             child: Image.asset(
               ImageConstant.backround_email,
@@ -39,19 +39,14 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
               builder: (context, constraints) {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Back Button
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            alignment: Alignment.centerLeft,
-                            icon: const Icon(Icons.arrow_back, color: AppColors.black),
-                            onPressed: () => Navigator.pop(context),
-                          ),
                           const SizedBox(height: 40),
 
                           // Header Text
@@ -84,21 +79,20 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: InkWell(
-                              onTap: ()  {
+                              onTap: () {
                                 _verifyEmail();
                               },
                               borderRadius: BorderRadius.circular(12),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  // Use an SVG for the Google Logo
                                   SvgPicture.asset(
                                     ImageConstant.google_icon,
                                     height: 24,
                                   ),
                                   const SizedBox(width: 12),
                                   const CustomText(
-                                    text: 'Continue with Google',
+                                    text: 'Verify Gmail for Access',
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                     color: AppColors.black,
@@ -108,8 +102,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                             ),
                           ),
                           const SizedBox(height: 32),
-
-                          // Verification Info Box
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
@@ -119,12 +111,16 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(Icons.verified_user_outlined,
-                                    color: AppColors.textGreen, size: 20),
+                                const Icon(
+                                  Icons.verified_user_outlined,
+                                  color: AppColors.textGreen,
+                                  size: 20,
+                                ),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const CustomText(
                                         text: 'Gmail Verification',
@@ -134,7 +130,8 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                                       ),
                                       const SizedBox(height: 4),
                                       CustomText(
-                                        text: "We'll use your Google account to securely verify your professional identity and corporate affiliation.",
+                                        text:
+                                            "We'll use your Google account to securely verify your professional identity and corporate affiliation.",
                                         fontSize: 13,
                                         color: Colors.grey.shade600,
                                       ),
@@ -148,27 +145,45 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
                           // Legal Disclaimer
                           CustomText(
-                            text: 'By continuing, you agree to our Terms of Service and Privacy Policy. CommuteShare will only access your basic profile information and email address.',
+                            text:
+                                'By continuing, you agree to our Terms of Service and Privacy Policy. CommuteShare will only access your basic profile information and email address.',
                             fontSize: 12,
                             color: Colors.grey.shade600,
                             textAlign: TextAlign.center,
                           ),
 
-                          // Spacer to push help text to bottom
                           const SizedBox(height: 40),
 
-                          // Footer Link
-                          // Center(
-                          //   child: TextButton(
-                          //     onPressed: () {},
-                          //     child: const CustomText(
-                          //       text: 'Need help signing in?',
-                          //       fontSize: 16,
-                          //       fontWeight: FontWeight.w500,
-                          //       color: AppColors.textGreen,
-                          //     ),
-                          //   ),
-                          // ),
+                          // --- ADDED FOOTER HERE ---
+                          Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomText(
+                                  text: "Already have an account? ",
+                                  color: Colors.grey.shade600,
+                                  fontSize: 14,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    // Navigate to your Sign In screen here
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SignInPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: const CustomText(
+                                    text: 'Sign in',
+                                    color: AppColors.buttonGreen,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           const SizedBox(height: 20),
                         ],
                       ),
@@ -187,84 +202,69 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     try {
       final user = await _authService.signInWithGoogle();
 
-      log("==================================");
-      log("USER OBJECT: $user");
-      log("==================================");
+      mylog("==================================");
+      mylog("USER OBJECT: $user");
+      mylog("==================================");
 
       if (user != null) {
-        log("UID: ${user.uid}");
-        log("DISPLAY NAME: ${user.displayName}");
-        log("EMAIL: ${user.email}");
-        log("PHONE NUMBER: ${user.phoneNumber}");
-        log("PHOTO URL: ${user.photoURL}");
-        log("EMAIL VERIFIED: ${user.emailVerified}");
-        log("IS ANONYMOUS: ${user.isAnonymous}");
-        log("TENANT ID: ${user.tenantId}");
-        log("REFRESH TOKEN: ${user.refreshToken}");
+        mylog("UID: ${user.uid}");
+        mylog("DISPLAY NAME: ${user.displayName}");
+        mylog("EMAIL: ${user.email}");
+        mylog("PHONE NUMBER: ${user.phoneNumber}");
+        mylog("PHOTO URL: ${user.photoURL}");
+        mylog("EMAIL VERIFIED: ${user.emailVerified}");
+        mylog("IS ANONYMOUS: ${user.isAnonymous}");
+        mylog("TENANT ID: ${user.tenantId}");
+        mylog("REFRESH TOKEN: ${user.refreshToken}");
 
-        log(
-          "CREATION TIME: ${user.metadata.creationTime}",
-        );
+        mylog("CREATION TIME: ${user.metadata.creationTime}");
 
-        log(
-          "LAST SIGN IN TIME: ${user.metadata.lastSignInTime}",
-        );
+        mylog("LAST SIGN IN TIME: ${user.metadata.lastSignInTime}");
 
         for (var provider in user.providerData) {
-          log("------------ PROVIDER ------------");
-          log("PROVIDER ID: ${provider.providerId}");
-          log("PROVIDER UID: ${provider.uid}");
-          log("NAME: ${provider.displayName}");
-          log("EMAIL: ${provider.email}");
-          log("PHONE: ${provider.phoneNumber}");
-          log("PHOTO URL: ${provider.photoURL}");
+          mylog("------------ PROVIDER ------------");
+          mylog("PROVIDER ID: ${provider.providerId}");
+          mylog("PROVIDER UID: ${provider.uid}");
+          mylog("NAME: ${provider.displayName}");
+          mylog("EMAIL: ${provider.email}");
+          mylog("PHONE: ${provider.phoneNumber}");
+          mylog("PHOTO URL: ${provider.photoURL}");
         }
 
         final token = await user.getIdToken();
 
-        log("ID TOKEN: $token");
+        mylog("ID TOKEN: $token");
 
-        log("==================================");
+        mylog("==================================");
       }
 
       if (!mounted) return;
 
       if (user != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Welcome ${user.email}',
-            ),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Welcome ${user.email}')));
       }
     } on FirebaseAuthException catch (e) {
-      log("FirebaseAuthException");
-      log("CODE: ${e.code}");
-      log("MESSAGE: ${e.message}");
-      log("STACKTRACE: ${e.stackTrace}");
+      mylog("FirebaseAuthException");
+      mylog("CODE: ${e.code}");
+      mylog("MESSAGE: ${e.message}");
+      mylog("STACKTRACE: ${e.stackTrace}");
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.message ?? 'Authentication failed',
-          ),
-        ),
+        SnackBar(content: Text(e.message ?? 'Authentication failed')),
       );
     } catch (e, stackTrace) {
-      log("GENERAL ERROR: $e");
-      log("STACKTRACE: $stackTrace");
+      mylog("GENERAL ERROR: $e");
+      mylog("STACKTRACE: $stackTrace");
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString(),
-          ),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
-  }}
+  }
+}
