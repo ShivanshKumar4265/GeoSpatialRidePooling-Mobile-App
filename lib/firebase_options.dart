@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '669858546192',
     projectId: 'geospatial-commute-sharing-app',
     storageBucket: 'geospatial-commute-sharing-app.firebasestorage.app',
+    androidClientId: '669858546192-tt4pq3hpbiki6r19jir81hfqio3kbs66.apps.googleusercontent.com',
+    iosClientId: '669858546192-r6fgd7t10fpi49rp7e412h5ag3toukuh.apps.googleusercontent.com',
     iosBundleId: 'com.example.geoSpatialRidePoolingSystem2',
   );
 
@@ -72,6 +74,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '669858546192',
     projectId: 'geospatial-commute-sharing-app',
     storageBucket: 'geospatial-commute-sharing-app.firebasestorage.app',
+    androidClientId: '669858546192-tt4pq3hpbiki6r19jir81hfqio3kbs66.apps.googleusercontent.com',
+    iosClientId: '669858546192-r6fgd7t10fpi49rp7e412h5ag3toukuh.apps.googleusercontent.com',
     iosBundleId: 'com.example.geoSpatialRidePoolingSystem2',
   );
 
@@ -83,4 +87,5 @@ class DefaultFirebaseOptions {
     authDomain: 'geospatial-commute-sharing-app.firebaseapp.com',
     storageBucket: 'geospatial-commute-sharing-app.firebasestorage.app',
   );
+
 }

@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geo_spatial_ride_pooling_system_2/core/constant/ImageConstant.dart';
+import 'package:geo_spatial_ride_pooling_system_2/core/utils/show_toast_util.dart';
+import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/Pages/CreatePasswordPage.dart';
 import '../../../core/utils/custom_text.dart';
 import '../../../core/utils/log.dart';
 import '../../../shared/AppColors.dart';
@@ -241,9 +243,18 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       if (!mounted) return;
 
       if (user != null) {
-        ScaffoldMessenger.of(
+        Navigator.pushReplacement(
           context,
-        ).showSnackBar(SnackBar(content: Text('Welcome ${user.email}')));
+          MaterialPageRoute(
+            builder:
+                (context) => CreatePasswordScreen(
+                  email: user.email,
+                  name: user.displayName,
+                  photoUrl: user.photoURL,
+                ),
+          ),
+        );
+        ToastUtil.showToast(message: "Email verification successful");
       }
     } on FirebaseAuthException catch (e) {
       mylog("FirebaseAuthException");

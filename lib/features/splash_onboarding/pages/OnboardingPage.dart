@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geo_spatial_ride_pooling_system_2/core/constant/ImageConstant.dart';
+import 'package:geo_spatial_ride_pooling_system_2/core/constant/shared_pref_constant.dart';
+import 'package:geo_spatial_ride_pooling_system_2/core/utils/shared_pref_util.dart';
 
 import '../../../core/utils/custom_text.dart';
 import '../../../shared/AppColors.dart';
@@ -71,17 +73,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       height: 56,
                       child: ElevatedButton(
                         onPressed: () {
-                          // SnackbarUtil.showSnackbar(
-                          //   context,
-                          //   message: 'Navigating to Email Verification...',
-                          //   backgroundColor: AppColors.buttonGreen,
-                          // );
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => const EmailVerificationPage(),
-                            ),
-                          );
+                          _navigationToEmailVerification();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.buttonGreen,
@@ -112,6 +104,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _navigationToEmailVerification() {
+    SharedPreferencesUtil.instance.setBoolData(SharedPrefConstant.isFirstTime, false);
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder:
+            (context) => const EmailVerificationPage(),
       ),
     );
   }

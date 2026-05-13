@@ -1,20 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:geo_spatial_ride_pooling_system_2/DummyPage.dart';
+import 'package:geo_spatial_ride_pooling_system_2/core/constant/shared_pref_constant.dart';
+import 'package:geo_spatial_ride_pooling_system_2/core/utils/shared_pref_util.dart';
 import 'package:geo_spatial_ride_pooling_system_2/core/utils/show_toast_util.dart';
+
 import '../../../core/utils/custom_text.dart';
 import '../../../core/widgets/CustomInputFeild.dart';
 import '../../../shared/AppColors.dart';
 
 class CreatePasswordScreen extends StatefulWidget {
-  const CreatePasswordScreen({Key? key}) : super(key: key);
+  final String? email;
+  final String? name;
+  final String? photoUrl;
+
+  const CreatePasswordScreen({
+    Key? key,
+    required this.email,
+    required this.name,
+    required this.photoUrl,
+  }) : super(key: key);
 
   @override
-  State<CreatePasswordScreen> createState() => _CreatePasswordScreenState();
+  State<CreatePasswordScreen> createState() =>
+      _CreatePasswordScreenState();
 }
 
-class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+class _CreatePasswordScreenState
+    extends State<CreatePasswordScreen> {
+  final TextEditingController _passwordController =
+  TextEditingController();
+
+  final TextEditingController _confirmController =
+  TextEditingController();
+
+  final TextEditingController _emailController =
+  TextEditingController();
 
   bool hasMinLength = false;
   bool hasUppercase = false;
@@ -22,44 +42,21 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
   bool passwordsMatch = false;
   bool isEmailValid = false;
 
-  void _checkPasswordStrength(String value) {
-    setState(() {
-      hasMinLength = value.length >= 8;
-      hasUppercase = value.contains(RegExp(r'[A-Z]'));
-      hasNumericOrSymbol =
-          value.contains(RegExp(r'[0-9!@#$%^&*(),.?":{}|<>]'));
-
-      passwordsMatch = value == _confirmController.text;
-    });
-  }
-
-  void _checkConfirmPassword(String value) {
-    setState(() {
-      passwordsMatch = value == _passwordController.text;
-    });
-  }
-
-  void _validateEmail(String value) {
-    setState(() {
-      isEmailValid = RegExp(
-        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-      ).hasMatch(value);
-    });
-  }
-
-  bool get isPasswordStrong =>
-      hasMinLength &&
-          hasUppercase &&
-          hasNumericOrSymbol &&
-          passwordsMatch &&
-          isEmailValid;
-
   @override
-  void dispose() {
-    _passwordController.dispose();
-    _confirmController.dispose();
-    _emailController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+
+    _emailController.text = widget.email ?? '';
+
+    _validateEmail(_emailController.text);
+
+    _passwordController.addListener(() {
+      _checkPasswordStrength(_passwordController.text);
+    });
+
+    _confirmController.addListener(() {
+      _checkConfirmPassword(_confirmController.text);
+    });
   }
 
   @override
@@ -69,15 +66,15 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
 
-      // SafeArea ensures content doesn't overlap with status bar/notches
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 24.0),
               child: ConstrainedBox(
-                // Ensures the content can expand but also scroll if height is limited
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                constraints:
+                BoxConstraints(minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: Column(
                     children: [
@@ -104,11 +101,12 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                       // Email Field
                       CustomInputField(
                         label: 'Email Address',
-                        hintText: 'alex.walker@corporate.com',
-
+                        hintText:
+                        'alex.walker@corporate.com',
                         prefixIcon: Icons.email_outlined,
-                        keyboardType: TextInputType.emailAddress,
-                        controller: null,
+                        keyboardType:
+                        TextInputType.emailAddress,
+                        controller: _emailController,
                         isEditable: false,
                       ),
 
@@ -128,15 +126,15 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                       // Confirm Password Field
                       CustomInputField(
                         label: 'Confirm Password',
-                        hintText: 'Repeat your password',
+                        hintText:
+                        'Repeat your password',
                         prefixIcon: Icons.refresh,
                         isPassword: true,
                         controller: _confirmController,
                       ),
-                      const SizedBox(height: 24),
-                      // Security Requirements Box
 
-                      // Flexible spacer to push the bottom elements down on large screens
+                      const SizedBox(height: 24),
+
                       const Spacer(),
 
                       const SizedBox(height: 20),
@@ -149,11 +147,13 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
         ),
       ),
 
-      // bottomNavigationBar remains fixed at the bottom for all screen sizes
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding:
-          const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 20.0),
+          padding: const EdgeInsets.only(
+            left: 24.0,
+            right: 24.0,
+            bottom: 20.0,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -161,18 +161,18 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                 width: double.infinity,
                 height: 54,
                 child: ElevatedButton(
-                  onPressed:  () async {
-                    FocusScope.of(context).unfocus();
-
-                    ToastUtil.showToast(message: 'Password set successfully!');
-                  }
-                      ,
+                  onPressed: () {
+                    _passwordValidation();
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.buttonGreen,
+                    backgroundColor:
+                    AppColors.buttonGreen,
                     disabledBackgroundColor:
-                    AppColors.buttonGreen.withOpacity(0.5),
+                    AppColors.buttonGreen
+                        .withOpacity(0.5),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius:
+                      BorderRadius.circular(10),
                     ),
                     elevation: 0,
                   ),
@@ -200,13 +200,65 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
     );
   }
 
-  Widget _buildRequirementRow(String text, bool isMet) {
+  void _checkPasswordStrength(String value) {
+    setState(() {
+      hasMinLength = value.length >= 8;
+
+      hasUppercase =
+          value.contains(RegExp(r'[A-Z]'));
+
+      hasNumericOrSymbol = value.contains(
+        RegExp(r'[0-9!@#$%^&*(),.?":{}|<>]'),
+      );
+
+      passwordsMatch =
+          value == _confirmController.text;
+    });
+  }
+
+  void _checkConfirmPassword(String value) {
+    setState(() {
+      passwordsMatch =
+          value == _passwordController.text;
+    });
+  }
+
+  void _validateEmail(String value) {
+    setState(() {
+      isEmailValid = RegExp(
+        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+      ).hasMatch(value);
+    });
+  }
+
+  bool get isPasswordStrong =>
+      hasMinLength &&
+          hasUppercase &&
+          hasNumericOrSymbol &&
+          passwordsMatch &&
+          isEmailValid;
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _confirmController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildRequirementRow(
+      String text,
+      bool isMet,
+      ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding:
+      const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           Icon(
-            isMet ? Icons.check_circle : Icons.radio_button_unchecked,
+            isMet
+                ? Icons.check_circle
+                : Icons.radio_button_unchecked,
             size: 18,
             color: isMet
                 ? AppColors.buttonGreen
@@ -218,11 +270,100 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
           CustomText(
             text: text,
             fontSize: 13,
-            color:
-            isMet ? AppColors.black : Colors.grey.shade600,
+            color: isMet
+                ? AppColors.black
+                : Colors.grey.shade600,
           ),
         ],
       ),
     );
+  }
+
+  void _passwordValidation() {
+
+    FocusScope.of(context).unfocus();
+
+    String password =
+    _passwordController.text.trim();
+
+    String confirmPassword =
+    _confirmController.text.trim();
+
+    // Empty validation
+    if (password.isEmpty) {
+      ToastUtil.showToast(
+        message:
+        'Please enter password',
+      );
+      return;
+    }
+
+    if (confirmPassword.isEmpty) {
+      ToastUtil.showToast(
+        message:
+        'Please confirm your password',
+      );
+      return;
+    }
+
+    // Password validations
+    if (!hasMinLength) {
+      ToastUtil.showToast(
+        message:
+        'Password must be at least 8 characters',
+      );
+      return;
+    }
+
+    if (!hasUppercase) {
+      ToastUtil.showToast(
+        message:
+        'Password must contain one uppercase letter',
+      );
+      return;
+    }
+
+    if (!hasNumericOrSymbol) {
+      ToastUtil.showToast(
+        message:
+        'Password must contain number or special character',
+      );
+      return;
+    }
+
+    // Match validation
+    if (!passwordsMatch) {
+      ToastUtil.showToast(
+        message:
+        'Passwords do not match',
+      );
+      return;
+    }
+
+    if (!isEmailValid) {
+      ToastUtil.showToast(
+        message:
+        'Invalid email address',
+      );
+      return;
+    }
+
+    // Success
+    ToastUtil.showToast(
+      message:
+      'Password set successfully!',
+    );
+
+    SharedPreferencesUtil.instance.setBoolData(SharedPrefConstant.isLoggedIn, true);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            Dummypage(),
+      ),
+    );
+
+
   }
 }

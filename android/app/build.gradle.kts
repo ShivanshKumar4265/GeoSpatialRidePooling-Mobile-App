@@ -1,9 +1,10 @@
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
-    id("com.google.gms.google-services")
     // END: FlutterFire Configuration
     id("kotlin-android")
+    id("com.google.gms.google-services")
+
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
@@ -11,7 +12,8 @@ plugins {
 android {
     namespace = "com.example.geo_spatial_ride_pooling_system_2"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
+//    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -28,6 +30,8 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 23
+        multiDexEnabled = true       // ← add this
+
 //        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -57,6 +61,13 @@ android {
             )
         }
     }
+}
+
+
+dependencies {
+    implementation("androidx.multidex:multidex:2.0.1")
+//    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+//    implementation("com.google.firebase:firebase-analytics")
 }
 
 flutter {

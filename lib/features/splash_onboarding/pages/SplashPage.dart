@@ -13,7 +13,6 @@ import '../../../core/utils/log.dart';
 import '../../../shared/AppColors.dart';
 import 'OnboardingPage.dart';
 
-
 class Splashpage extends StatefulWidget {
   const Splashpage({Key? key}) : super(key: key);
 
@@ -27,7 +26,6 @@ class _SplashpageState extends State<Splashpage> {
     super.initState();
     // Timer to transition after 3 seconds
     Timer(const Duration(seconds: 3), () {
-
       _navigateBasedOnboardingStatus();
     });
   }
@@ -51,7 +49,8 @@ class _SplashpageState extends State<Splashpage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: SvgPicture.asset(
-                    ImageConstant.logo, // Ensure path is correct in pubspec.yaml
+                    ImageConstant
+                        .logo, // Ensure path is correct in pubspec.yaml
                     height: 40,
                     width: 40,
                     colorFilter: const ColorFilter.mode(
@@ -84,7 +83,9 @@ class _SplashpageState extends State<Splashpage> {
                   width: 60,
                   child: LinearProgressIndicator(
                     backgroundColor: Color(0xFFE0E0E0),
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.buttonGreen),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.buttonGreen,
+                    ),
                     minHeight: 3,
                   ),
                 ),
@@ -108,7 +109,11 @@ class _SplashpageState extends State<Splashpage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.shield_outlined, size: 16, color: Colors.grey),
+                  const Icon(
+                    Icons.shield_outlined,
+                    size: 16,
+                    color: Colors.grey,
+                  ),
                   const SizedBox(height: 4),
                   CustomText(
                     text: 'A Professional Commute System',
@@ -125,25 +130,34 @@ class _SplashpageState extends State<Splashpage> {
   }
 
   Future<void> _navigateBasedOnboardingStatus() async {
-
     bool isFirstTime =
-        await SharedPreferencesUtil.instance
-        .getBoolData(SharedPrefConstant.isFirstTime) ?? true;
+        await SharedPreferencesUtil.instance.getBoolData(
+          SharedPrefConstant.isFirstTime,
+        ) ??
+        true;
+
+    bool isLoggedIn =
+        await SharedPreferencesUtil.instance.getBoolData(
+          SharedPrefConstant.isLoggedIn,
+        ) ??
+        false;
+
     mylog("Is First Time : ${isFirstTime}");
 
     if (isFirstTime) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const OnboardingScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
       );
-      return;
+    } else {
+      if(!isLoggedIn) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const SignInPage()),
+        );
+      }else{
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const Dummypage()),
+        );
+      }
     }
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => SignInPage(),
-      ),
-    );
   }
 }

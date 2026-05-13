@@ -218,7 +218,7 @@ packages:
     source: hosted
     version: "7.0.1"
   firebase_auth:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: firebase_auth
       sha256: "0fed2133bee1369ee1118c1fef27b2ce0d84c54b7819a2b17dada5cfec3b03ff"
@@ -242,7 +242,7 @@ packages:
     source: hosted
     version: "5.15.3"
   firebase_core:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: firebase_core
       sha256: "7be63a3f841fc9663342f7f3a011a42aef6a61066943c90b1c434d79d5c995c5"
@@ -305,7 +305,7 @@ packages:
     source: sdk
     version: "0.0.0"
   fluttertoast:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: fluttertoast
       sha256: "90778fe0497fe3a09166e8cf2e0867310ff434b794526589e77ec03cf08ba8e8"
@@ -329,7 +329,7 @@ packages:
     source: hosted
     version: "0.3.3+1"
   google_sign_in:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: google_sign_in
       sha256: d0a2c3bcb06e607bb11e4daca48bd4b6120f0bbc4015ccebbe757d24ea60ed2a
@@ -593,7 +593,7 @@ packages:
     source: hosted
     version: "4.1.0"
   shared_preferences:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: shared_preferences
       sha256: "6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5"
