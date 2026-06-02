@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Env.dart';
@@ -75,7 +76,10 @@ class ApiService {
         // throw Exception('Error: ${response.statusCode}, ${response.body}');
       }
     } catch (e) {
-      throw Exception('Failed to make API call: $e');
+      // throw Exception('$e');
+      debugPrint('in API SERVICE Error in API request: $e');
+      rethrow;
+
     }
   }
 

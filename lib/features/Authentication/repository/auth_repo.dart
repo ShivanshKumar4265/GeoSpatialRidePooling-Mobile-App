@@ -1,14 +1,17 @@
+import 'package:geo_spatial_ride_pooling_system_2/core/services/base_api_response.dart';
+
 import '../../../Env.dart';
 import '../../../core/constant/shared_pref_constant.dart';
 import '../../../core/services/ApiService.dart';
 import '../../../core/utils/shared_pref_util.dart';
-import '../modal/password_response.dart';
+import '../modal/auth_response.dart';
 
 class AuthRepository {
   final ApiService _apiService;
+
   AuthRepository(this._apiService);
 
-  Future<PasswrodResponse> createPassword({
+  Future<BaseApiResponse<AuthData>> createPassword({
     required String email,
     required String password,
     required String confirmPassword,
@@ -23,29 +26,60 @@ class AuthRepository {
       },
     );
 
-    final model = PasswrodResponse.fromJson(response);
+    final model = BaseApiResponse<AuthData>.fromJson(
+      response,
+      (data) => AuthData.fromJson(data),
+    );
 
-    if (model.status != true) {
-      throw Exception(model.message ?? 'Password creation failed');
+    if (!model.status) {
+      throw Exception(model.message);
     }
 
-    saveData(model);
+    if (model.data != null) {
+      saveData(model.data!);
+    }
 
     return model;
   }
 
-  void saveData(PasswrodResponse model) {
+  Future<BaseApiResponse<AuthData>> login({
+    required String email,
+    required String password,
+  }) async {
+    final response = await _apiService.request(
+      'POST',
+      Env.login,
+      body: {'email': email, 'password': password},
+    );
+
+    final model = BaseApiResponse<AuthData>.fromJson(
+      response,
+      (data) => AuthData.fromJson(data),
+    );
+
+    if (model.status != true) {
+      throw Exception(model.message);
+    }
+
+    if (model.data != null) {
+      saveData(model.data!);
+    }
+
+    return model;
+  }
+
+  void saveData(AuthData model) {
     SharedPreferencesUtil.instance.setBoolData(
       SharedPrefConstant.isLoggedIn,
       true,
     );
     SharedPreferencesUtil.instance.setStringData(
       SharedPrefConstant.accessToken,
-      model.data?.accessToken ?? '',
+      model?.accessToken ?? '',
     );
     SharedPreferencesUtil.instance.setStringData(
       SharedPrefConstant.refreshToken,
-      model.data?.refreshToken ?? '',
+      model?.refreshToken ?? '',
     );
   }
 }

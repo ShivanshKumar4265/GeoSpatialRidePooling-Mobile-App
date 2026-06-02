@@ -55,11 +55,6 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-
     return Scaffold(
       backgroundColor: AppColors.white,
       body: BlocConsumer<AuthBloc, AuthState>(

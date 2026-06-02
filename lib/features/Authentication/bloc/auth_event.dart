@@ -13,3 +13,14 @@ class EventCreatePassword extends AuthEvent {
     required this.confirmPassword,
   });
 }
+
+
+class EventLogin extends AuthEvent {
+  final String email;
+  final String password;
+
+  EventLogin({
+    required this.email,
+    required this.password,
+  });
+}
