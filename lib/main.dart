@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/repository/auth_repo.dart';
 
 import 'core/services/ApiService.dart';
 import 'features/Authentication/bloc/auth_bloc.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (_) => AuthBloc(ApiService()),
+          create: (_) => AuthBloc(AuthRepository(ApiService())),
         ),
       ],
       child: MaterialApp(
