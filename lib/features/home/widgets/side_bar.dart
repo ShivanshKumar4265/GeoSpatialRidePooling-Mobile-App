@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/utils/custom_text.dart';
+import '../../../core/widgets/custom_dialog.dart';
 import '../../../shared/AppColors.dart';
+import '../bloc/home_bloc.dart';
+import '../bloc/home_event.dart';
+import 'drawer_item.dart';
 
 class CustomSidebar extends StatelessWidget {
   const CustomSidebar({Key? key}) : super(key: key);
@@ -55,13 +59,13 @@ class CustomSidebar extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.verified_outlined,
                         size: 16,
                         color: AppColors.buttonGreen,
                       ),
                       const SizedBox(width: 4),
-                      CustomText(
+                      const CustomText(
                         text: 'Verified Professional',
                         fontSize: 13,
                         color: AppColors.buttonGreen,
@@ -78,20 +82,20 @@ class CustomSidebar extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 children: [
-                  _buildDrawerItem(
+                  buildDrawerItem(
                     icon: Icons.home_outlined,
                     title: 'Home',
                     isSelected: true,
                   ),
-                  _buildDrawerItem(
+                  buildDrawerItem(
                     icon: Icons.directions_car_outlined,
                     title: 'My Rides',
                   ),
-                  _buildDrawerItem(
+                  buildDrawerItem(
                     icon: Icons.account_balance_wallet_outlined,
                     title: 'Payments & Wallet',
                   ),
-                  _buildDrawerItem(
+                  buildDrawerItem(
                     icon: Icons.badge_outlined,
                     title: 'Professional Identity',
                   ),
@@ -102,15 +106,15 @@ class CustomSidebar extends StatelessWidget {
                     ),
                     child: Divider(),
                   ),
-                  _buildDrawerItem(
+                  buildDrawerItem(
                     icon: Icons.settings_outlined,
                     title: 'Settings & Privacy',
                   ),
-                  _buildDrawerItem(
+                  buildDrawerItem(
                     icon: Icons.help_outline_rounded,
                     title: 'Help & Support',
                   ),
-                  _buildDrawerItem(
+                  buildDrawerItem(
                     icon: Icons.info_outline_rounded,
                     title: 'About CommuteShare',
                   ),
@@ -118,23 +122,47 @@ class CustomSidebar extends StatelessWidget {
               ),
             ),
 
-            // Footer Logout Widget
+            // ==================== LOGOUT BUTTON ====================
             Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.logout, color: Colors.redAccent, size: 20),
-                    SizedBox(width: 8),
-                    CustomText(
-                      text: 'Logout',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.redAccent,
+              padding: const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 24.0),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(14),
+                    onTap: () {
+                      // 1. Grab the BLoC while the sidebar is completely active
+                      final homeBloc = context.read<HomeBloc>();
+
+                      // 2. Open the confirmation dialog immediately using the live context
+                      _showLogoutConfirmationDialog(context, homeBloc);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.logout_rounded,
+                            color: Colors.redAccent,
+                            size: 20,
+                          ),
+                          SizedBox(width: 10),
+                          CustomText(
+                            text: 'Logout',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.redAccent,
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -144,32 +172,23 @@ class CustomSidebar extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawerItem({
-    required IconData icon,
-    required String title,
-    bool isSelected = false,
-  }) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 2),
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.grey.shade100 : Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: isSelected ? AppColors.buttonGreen : Colors.grey.shade700,
-          size: 22,
-        ),
-        title: CustomText(
-          text: title,
-          fontSize: 15,
-          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-          color: isSelected ? AppColors.buttonGreen : Colors.black87,
-        ),
-        onTap: () {},
-        dense: true,
-      ),
+  void _showLogoutConfirmationDialog(BuildContext sidebarContext, HomeBloc homeBloc) {
+    CustomActionDialog.show(
+      context: sidebarContext,
+      iconColor: AppColors.buttonGreen,
+      title: 'Logout Confirmation',
+      message: 'Are you sure you want to logout? You will need to login again to access your rides and profile.',
+      secondaryButtonText: 'No, Stay Logged In',
+      primaryButtonText: 'Yes, Logout',
+      onSecondaryPressed: () {
+        // Safe: Closes only the confirmation dialog overlay
+        Navigator.pop(sidebarContext);
+      },
+      onPrimaryPressed: () {
+        Navigator.pop(sidebarContext); // 1. Closes the confirmation dialog overlay
+        Navigator.pop(sidebarContext); // 2. Closes the sidebar drawer clean
+        homeBloc.add(EventLogout());   // 3. Fires the logout routine safely
+      },
     );
   }
 }

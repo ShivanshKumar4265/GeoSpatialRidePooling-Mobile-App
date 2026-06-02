@@ -1,7 +1,5 @@
 sealed class AuthEvent {}
 
-
-
 class EventCreatePassword extends AuthEvent {
   final String email;
   final String password;
@@ -14,13 +12,13 @@ class EventCreatePassword extends AuthEvent {
   });
 }
 
-
 class EventLogin extends AuthEvent {
   final String email;
   final String password;
 
-  EventLogin({
-    required this.email,
-    required this.password,
-  });
+  EventLogin({required this.email, required this.password});
+}
+
+class EventRefrehToken extends AuthEvent {
+  EventRefrehToken();
 }

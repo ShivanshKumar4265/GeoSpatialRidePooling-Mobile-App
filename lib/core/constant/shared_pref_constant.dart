@@ -8,4 +8,5 @@ class SharedPrefConstant {
   // but if refresh token is expired then user need to login again
   static  const String REFRESH_TOKEN_EXPIRED = "REFRESH_TOKEN_EXPIRED";
   static const String ACCESS_TOKEN_EXPIRED = "ACCESS_TOKEN_EXPIRED";
+  static const String TOKEN_INVALID = "TOKEN_INVALID";
 }

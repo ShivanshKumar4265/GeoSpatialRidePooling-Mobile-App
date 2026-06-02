@@ -47,14 +47,20 @@ class StateLoginInvalidInput extends AuthState {
 
 // refresh token state
 
-class StateRefreshTokenLoading extends AuthState {}
+class StateRefreshTokenLoading extends AuthState {
+  final isLoading;
+  StateRefreshTokenLoading({required this.isLoading});
+}
 
 class StateRefreshTokenSuccess extends AuthState {
   final BaseApiResponse<RefreshTokenData> refreshTokenResponse;
-  StateRefreshTokenSuccess(this.refreshTokenResponse);
+  final isLoading;
+  StateRefreshTokenSuccess({required this.refreshTokenResponse, required this.isLoading});
 }
 
 class StateRefreshTokenFailure extends AuthState {
   final String error;
-  StateRefreshTokenFailure(this.error);
+  final isLoading;
+  StateRefreshTokenFailure({required this.error, required this.isLoading});
 }
+

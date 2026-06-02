@@ -23,7 +23,7 @@ final class _Env {
 
   static const String refresh_token = 'api/auth/refresh_token';
 
-  static const String logout = 'api/auth/logout';
+  static const String logout = 'api/user/logout';
 
   static const String profile = 'api/user/profile';
 }

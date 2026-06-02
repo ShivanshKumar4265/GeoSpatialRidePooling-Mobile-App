@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geo_spatial_ride_pooling_system_2/core/constant/shared_pref_constant.dart';
+import 'package:geo_spatial_ride_pooling_system_2/core/utils/shared_pref_util.dart';
 import 'package:geo_spatial_ride_pooling_system_2/core/utils/validate.dart';
 import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/repository/auth_repo.dart';
 
@@ -13,12 +15,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this._repository) : super(AuthInitialEvent()) {
     on<EventCreatePassword>(_onEventCreatePassword);
     on<EventLogin>(_onEventLogin);
+    on<EventRefrehToken>(_onEventRefrehToken);
+  }
+
+  Future<void> _onEventRefrehToken(
+    EventRefrehToken event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(StateRefreshTokenLoading(isLoading: true));
+
+    try {
+      final result = await _repository.refreshToken(
+        refreshToken:
+            SharedPreferencesUtil.instance.getStringData(
+                  SharedPrefConstant.refreshToken,
+                )
+                as String ??
+            '',
+      );
+
+      emit(
+        StateRefreshTokenSuccess(
+          refreshTokenResponse: result,
+          isLoading: false,
+        ),
+      );
+    } catch (e) {
+      emit(
+        StateRefreshTokenFailure(error: ErrorMapper.map(e), isLoading: false),
+      );
+    }
   }
 
   Future<void> _onEventCreatePassword(
-      EventCreatePassword event,
-      Emitter<AuthState> emit,
-      ) async {
+    EventCreatePassword event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(StateCreatePasswordLoading());
 
     final validationError = _validate(event);
@@ -36,20 +68,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       emit(StateCreatePasswordSuccess(result));
     } catch (e) {
-      emit(
-        StateCreatePasswordFailure(
-          ErrorMapper.map(e),
-        ),
-      );
+      emit(StateCreatePasswordFailure(ErrorMapper.map(e)));
     }
   }
 
-
-
-  Future<void> _onEventLogin(
-      EventLogin event,
-      Emitter<AuthState> emit,
-      ) async {
+  Future<void> _onEventLogin(EventLogin event, Emitter<AuthState> emit) async {
     emit(StateLoginLoading());
 
     final validationError = _validate(event);
@@ -67,14 +90,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(StateLoginSuccess(result));
     } catch (e) {
       debugPrint('rr Login error: $e');
-      emit(
-        StateLoginFailure(
-          ErrorMapper.map(e),
-        ),
-      );
+      emit(StateLoginFailure(ErrorMapper.map(e)));
     }
   }
-
 
   String? _validate(dynamic event) {
     if (event is EventCreatePassword || event is EventLogin) {

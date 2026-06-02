@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/repository/auth_repo.dart';
+import 'package:geo_spatial_ride_pooling_system_2/features/home/bloc/home_bloc.dart';
+import 'package:geo_spatial_ride_pooling_system_2/features/home/repository/home_repo.dart';
 
 import 'core/services/ApiService.dart';
 import 'features/Authentication/bloc/auth_bloc.dart';
@@ -28,8 +30,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (_) => AuthBloc(AuthRepository(ApiService())),
         ),
+        BlocProvider<HomeBloc>(
+          create: (_) => HomeBloc(HomeRepository(ApiService())),
+        ),
       ],
       child: MaterialApp(
+        navigatorKey: ApiService.navigatorKey,
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
