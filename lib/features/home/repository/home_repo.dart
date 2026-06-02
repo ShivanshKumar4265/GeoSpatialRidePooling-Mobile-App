@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:geo_spatial_ride_pooling_system_2/core/services/base_api_response.dart';
 import '../../../Env.dart';
 import '../../../core/constant/shared_pref_constant.dart';
@@ -10,11 +11,17 @@ class HomeRepository {
   HomeRepository(this._apiService);
 
   Future<BaseApiResponse<void>> logout() async {
+    final token = await SharedPreferencesUtil.instance.getStringData(
+      SharedPrefConstant.accessToken,
+    );
+
+    debugPrint('repo Logout token: $token'); // Debug print to check the token value
+
     final response = await _apiService.request(
       'POST',
       Env.logout,
       headers: {
-        'Authorization': 'Bearer ${SharedPreferencesUtil.instance.getStringData(SharedPrefConstant.accessToken)}',
+        'Authorization': 'Bearer $token)',
       },
     );
 
@@ -35,7 +42,8 @@ class HomeRepository {
 
 
   void deleteData(dynamic model) {
-    SharedPreferencesUtil.instance.removeData(SharedPrefConstant.accessToken);
-    SharedPreferencesUtil.instance.removeData(SharedPrefConstant.refreshToken);
+    SharedPreferencesUtil.instance.clearAllExceptKeys([
+      SharedPrefConstant.isFirstTime,
+    ]);
   }
 }
