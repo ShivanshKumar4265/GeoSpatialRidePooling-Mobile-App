@@ -13,10 +13,20 @@ abstract class Env {
   @EnviedField(varName: 'MEDIA_BASE_URL')
   static final String media_base_url = _Env.media_base_url;
 
-  @EnviedField(varName: 'GET_CONNECTION')
-  static final String get_Connection = _Env.get_Connection;
+  @EnviedField(varName: 'LOGIN')
+  static final String login = _Env.login;
 
-  @EnviedField(varName: 'REGISTER')
-  static final String register = _Env.register;
+  @EnviedField(varName: 'PASSWORD')
+  static final String passwrod = _Env.passwrod;
+
+  @EnviedField(varName: 'REFRESH_TOKEN')
+  static final String refresh_token = _Env.refresh_token;
+
+  @EnviedField(varName: 'LOGOUT')
+  static final String logout = _Env.logout;
+
+  @EnviedField(varName: 'PROFILE')
+  static final String profile = _Env.profile;
+
 
 }

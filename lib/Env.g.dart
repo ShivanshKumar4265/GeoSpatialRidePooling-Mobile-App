@@ -12,12 +12,18 @@ part of 'Env.dart';
 final class _Env {
   static const String apiKey = 'gaushala_2025ekdnsEDKDND';
 
-  static const String baseUrl = 'https://gaushaala.com/api/gaushala/';
+  static const String baseUrl = 'http://165.22.221.254:8089/';
 
   static const String media_base_url =
       'https://gaushaala.com/application/public/';
 
-  static const String get_Connection = 'get_Connection';
+  static const String login = 'api/auth/login';
 
-  static const String register = 'register';
+  static const String passwrod = 'api/auth/password';
+
+  static const String refresh_token = 'api/auth/refresh_token';
+
+  static const String logout = 'api/auth/logout';
+
+  static const String profile = 'api/user/profile';
 }
