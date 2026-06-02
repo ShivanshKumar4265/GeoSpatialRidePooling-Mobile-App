@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/bloc/auth_bloc.dart';
 import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/bloc/auth_event.dart';
 import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/bloc/auth_state.dart';
-import '../../../DummyPage.dart';
-import '../../../core/constant/shared_pref_constant.dart';
+
 import '../../../core/utils/SnackbarUtil.dart';
 import '../../../core/utils/custom_text.dart';
-import '../../../core/utils/shared_pref_util.dart';
 import '../../../core/utils/show_toast_util.dart';
 import '../../../core/widgets/CustomInputFeild.dart';
+import '../../../dashboard_page.dart';
 import '../../../shared/AppColors.dart';
 
 class CreatePasswordScreen extends StatefulWidget {
@@ -25,20 +24,16 @@ class CreatePasswordScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CreatePasswordScreen> createState() =>
-      _CreatePasswordScreenState();
+  State<CreatePasswordScreen> createState() => _CreatePasswordScreenState();
 }
 
 class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
-  final TextEditingController _passwordController =
-  TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  final TextEditingController _confirmController =
-  TextEditingController();
+  final TextEditingController _confirmController = TextEditingController();
 
-  final TextEditingController _emailController =
-  TextEditingController();
-  
+  final TextEditingController _emailController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -68,11 +63,11 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return SingleChildScrollView(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: ConstrainedBox(
-                    constraints:
-                    BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
                     child: IntrinsicHeight(
                       child: Column(
                         children: [
@@ -87,7 +82,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
                           CustomText(
                             text:
-                            'Set a strong password to secure your CommuteShare account.',
+                                'Set a strong password to secure your CommuteShare account.',
                             fontSize: 14,
                             color: Colors.grey.shade600,
                             textAlign: TextAlign.center,
@@ -98,11 +93,9 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                           // Email Field
                           CustomInputField(
                             label: 'Email Address',
-                            hintText:
-                            'alex.walker@corporate.com',
+                            hintText: 'alex.walker@corporate.com',
                             prefixIcon: Icons.email_outlined,
-                            keyboardType:
-                            TextInputType.emailAddress,
+                            keyboardType: TextInputType.emailAddress,
                             controller: _emailController,
                             isEditable: false,
                           ),
@@ -123,8 +116,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                           // Confirm Password Field
                           CustomInputField(
                             label: 'Confirm Password',
-                            hintText:
-                            'Repeat your password',
+                            hintText: 'Repeat your password',
                             prefixIcon: Icons.refresh,
                             isPassword: true,
                             controller: _confirmController,
@@ -148,11 +140,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: 24.0,
-            right: 24.0,
-            bottom: 20.0,
-          ),
+          padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 20.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -164,14 +152,12 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                     _onSetPasswordPress();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                    AppColors.buttonGreen,
-                    disabledBackgroundColor:
-                    AppColors.buttonGreen
-                        .withOpacity(0.5),
+                    backgroundColor: AppColors.buttonGreen,
+                    disabledBackgroundColor: AppColors.buttonGreen.withOpacity(
+                      0.5,
+                    ),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     elevation: 0,
                   ),
@@ -187,7 +173,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
               const CustomText(
                 text:
-                'By setting a password, you agree to our Terms of Service and Privacy Policy.',
+                    'By setting a password, you agree to our Terms of Service and Privacy Policy.',
                 fontSize: 11,
                 color: Colors.grey,
                 textAlign: TextAlign.center,
@@ -198,13 +184,9 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
       ),
     );
   }
-  
-  void _handleAuthState(
-      BuildContext context,
-      AuthState state,
-      ) {
-    switch (state.runtimeType) {
 
+  void _handleAuthState(BuildContext context, AuthState state) {
+    switch (state.runtimeType) {
       case StateInvalidInput:
         final s = state as StateInvalidInput;
 
@@ -226,31 +208,24 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
         break;
 
       case StateCreatePasswordSuccess:
-
         ToastUtil.showToast(
           message: "Password created successfully. Redirecting...",
         );
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) =>
-                Dummypage(),
-          ),
+          MaterialPageRoute(builder: (context) => DashboardPage()),
         );
         break;
     }
   }
-  
+
   void _onSetPasswordPress() {
     FocusScope.of(context).unfocus();
 
-    String password =
-    _passwordController.text.trim();
+    String password = _passwordController.text.trim();
 
-    String confirmPassword =
-    _confirmController.text.trim();
-
+    String confirmPassword = _confirmController.text.trim();
 
     context.read<AuthBloc>().add(
       EventCreatePassword(

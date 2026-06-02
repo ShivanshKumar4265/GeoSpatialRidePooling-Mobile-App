@@ -10,6 +10,7 @@ import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/Pages/
 import '../../../DummyPage.dart';
 import '../../../core/utils/custom_text.dart';
 import '../../../core/utils/log.dart';
+import '../../../dashboard_page.dart';
 import '../../../shared/AppColors.dart';
 import 'OnboardingPage.dart';
 
@@ -155,7 +156,7 @@ class _SplashpageState extends State<Splashpage> {
         );
       }else{
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const Dummypage()),
+          MaterialPageRoute(builder: (context) => const DashboardPage()),
         );
       }
     }

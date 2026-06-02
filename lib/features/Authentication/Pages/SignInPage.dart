@@ -10,6 +10,7 @@ import '../../../core/utils/SnackbarUtil.dart';
 import '../../../core/utils/custom_text.dart';
 import '../../../core/utils/show_toast_util.dart';
 import '../../../core/widgets/CustomInputFeild.dart';
+import '../../../dashboard_page.dart';
 import '../../../shared/AppColors.dart';
 import '../bloc/auth_bloc.dart';
 
@@ -215,7 +216,7 @@ class _SignInPageState extends State<SignInPage> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                Dummypage(),
+                DashboardPage(),
           ),
         );
         break;

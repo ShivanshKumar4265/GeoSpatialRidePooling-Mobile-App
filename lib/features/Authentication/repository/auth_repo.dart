@@ -1,4 +1,5 @@
 import 'package:geo_spatial_ride_pooling_system_2/core/services/base_api_response.dart';
+import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/modal/refresh_token_data.dart';
 
 import '../../../Env.dart';
 import '../../../core/constant/shared_pref_constant.dart';
@@ -69,18 +70,50 @@ class AuthRepository {
     return model;
   }
 
-  void saveData(AuthData model) {
-    SharedPreferencesUtil.instance.setBoolData(
-      SharedPrefConstant.isLoggedIn,
-      true,
+  Future<BaseApiResponse<RefreshTokenData>> refreshToken({
+    required String refreshToken,
+  }) async {
+    // this is login
+    final response = await _apiService.request(
+      'POST',
+      Env.refresh_token,
+      body: {'refreshToken': refreshToken},
     );
-    SharedPreferencesUtil.instance.setStringData(
-      SharedPrefConstant.accessToken,
-      model?.accessToken ?? '',
+
+    final refreshTokeResponse = BaseApiResponse<RefreshTokenData>.fromJson(
+      response,
+      (data) => RefreshTokenData.fromJson(data),
     );
-    SharedPreferencesUtil.instance.setStringData(
-      SharedPrefConstant.refreshToken,
-      model?.refreshToken ?? '',
-    );
+
+    if (refreshTokeResponse.status != true) {
+      throw Exception(refreshTokeResponse.message);
+    }
+
+    if (refreshTokeResponse.data != null) {
+      saveData(refreshTokeResponse.data!);
+    }
+
+    return refreshTokeResponse;
+  }
+
+  void saveData(dynamic model) {
+    if (model is AuthData) {
+      SharedPreferencesUtil.instance.setBoolData(
+        SharedPrefConstant.isLoggedIn,
+        true,
+      );
+    }
+
+    if (model is AuthData || model is RefreshTokenData) {
+      SharedPreferencesUtil.instance.setStringData(
+        SharedPrefConstant.accessToken,
+        model.accessToken,
+      );
+
+      SharedPreferencesUtil.instance.setStringData(
+        SharedPrefConstant.refreshToken,
+        model.refreshToken,
+      );
+    }
   }
 }

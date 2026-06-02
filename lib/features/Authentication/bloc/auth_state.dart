@@ -1,4 +1,5 @@
 import 'package:geo_spatial_ride_pooling_system_2/core/services/base_api_response.dart';
+import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/modal/refresh_token_data.dart';
 
 import '../modal/auth_response.dart';
 
@@ -42,4 +43,18 @@ class StateLoginFailure extends AuthState {
 class StateLoginInvalidInput extends AuthState {
   final String message;
   StateLoginInvalidInput(this.message);
+}
+
+// refresh token state
+
+class StateRefreshTokenLoading extends AuthState {}
+
+class StateRefreshTokenSuccess extends AuthState {
+  final BaseApiResponse<RefreshTokenData> refreshTokenResponse;
+  StateRefreshTokenSuccess(this.refreshTokenResponse);
+}
+
+class StateRefreshTokenFailure extends AuthState {
+  final String error;
+  StateRefreshTokenFailure(this.error);
 }
