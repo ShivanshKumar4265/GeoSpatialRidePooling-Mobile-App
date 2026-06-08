@@ -21,7 +21,7 @@ class HomeRepository {
       'POST',
       Env.logout,
       headers: {
-        'Authorization': 'Bearer $token)',
+        'Authorization': 'Bearer $token',
       },
     );
 

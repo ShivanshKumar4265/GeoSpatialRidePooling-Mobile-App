@@ -100,12 +100,21 @@ class ApiService {
       final refreshed = await _handleTokenRefresh();
 
       if (refreshed) {
-        // Retry the original request with the new access token
+        // Re-read the NEW access token and inject it into the headers
+        final newAccessToken = await SharedPreferencesUtil.instance
+            .getStringData(SharedPrefConstant.accessToken);
+
+        final updatedHeaders = Map<String, String>.from(headers ?? {});
+        if (newAccessToken != null && newAccessToken.isNotEmpty) {
+          updatedHeaders['Authorization'] = 'Bearer $newAccessToken';
+        }
+
+        // Retry the original request with the refreshed access token
         return _executeRequest(
           method,
           endpoint,
           body: body,
-          headers: headers,
+          headers: updatedHeaders,
           isFormData: isFormData,
           files: files,
         );
@@ -229,19 +238,37 @@ class ApiService {
         return false;
       }
 
-      // Call refresh token API directly (bypasses interception)
-      final refreshResponse = await _executeRequest(
-        'POST',
-        Env.refresh_token,
-        body: {'refreshToken': storedRefreshToken},
-      );
+      // Call refresh token API directly (bypasses interception).
+      // Wrap in try-catch because the server returns non-2xx when the
+      // refresh token is expired, which causes _executeRequest to throw.
+      Map<String, dynamic> refreshResponse;
+      try {
+        refreshResponse = await _executeRequest(
+          'POST',
+          Env.refresh_token,
+          body: {'refreshToken': storedRefreshToken},
+        );
+      } on ApiException catch (e) {
+        // Check if the server told us the refresh token itself is expired
+        final refreshError = e.response?['error'];
+        if (refreshError == SharedPrefConstant.REFRESH_TOKEN_EXPIRED ||
+            refreshError == SharedPrefConstant.TOKEN_INVALID) {
+          debugPrint(
+              '\x1B[31m[ApiService] Refresh token expired (from error response). Forcing logout.\x1B[0m');
+          await _forceLogout();
+          _refreshCompleter!.complete(false);
+          return false;
+        }
+        // Some other API error — treat as refresh failure
+        rethrow;
+      }
 
       final refreshApiResponse = BaseApiResponse<RefreshTokenData>.fromJson(
         refreshResponse,
             (data) => RefreshTokenData.fromJson(data),
       );
 
-      // Check if refresh token itself is expired
+      // Also check for refresh token expired in a successful (2xx) response body
       final refreshError = refreshResponse['error'];
       if (refreshError == SharedPrefConstant.REFRESH_TOKEN_EXPIRED) {
         debugPrint(
