@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/utils/SnackbarUtil.dart';
+import '../../../core/widgets/CustomDropdownField.dart';
 import '../../../shared/AppColors.dart';
 import '../../../core/widgets/app_text.dart';
 import '../bloc/offer_ride_bloc.dart';
@@ -20,7 +21,6 @@ class OfferRidePage extends StatefulWidget {
 class _OfferRidePageState extends State<OfferRidePage> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controllers - Route Details
   final _pickupCtrl = TextEditingController();
   final _landmarkCtrl = TextEditingController();
   final _destinationCtrl = TextEditingController();
@@ -363,32 +363,13 @@ class _OfferRidePageState extends State<OfferRidePage> {
         if (_isRepeatRide)
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText(text: "Repeat Type", fontSize: 12, color: Colors.grey.shade700),
-                const SizedBox(height: 6),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: _repeatType,
-                      isExpanded: true,
-                      items: ['Weekdays', 'Weekends', 'Daily'].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (val) => setState(() => _repeatType = val!),
-                    ),
-                  ),
-                ),
-              ],
+            child: CustomDropdownField(
+              label: "Repeat Type",
+              value: _repeatType,
+              items: const ['Weekdays', 'Weekends', 'Daily'],
+              onChanged: (val) {
+                if (val != null) setState(() => _repeatType = val);
+              },
             ),
           ),
       ],
@@ -503,31 +484,16 @@ class _OfferRidePageState extends State<OfferRidePage> {
     return Column(
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start, // Aligns items to top so error texts don't break layout
           children: [
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText(text: "Vehicle Type", fontSize: 12, color: Colors.grey.shade700),
-                  const SizedBox(height: 6),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: _vehicleType,
-                        isExpanded: true,
-                        items: ['Sedan', 'SUV', 'Hatchback'].map((String value) {
-                          return DropdownMenuItem<String>(value: value, child: Text(value));
-                        }).toList(),
-                        onChanged: (val) => setState(() => _vehicleType = val!),
-                      ),
-                    ),
-                  ),
-                ],
+              child: CustomDropdownField(
+                label: "Vehicle Type",
+                value: _vehicleType,
+                items: const ['Sedan', 'SUV', 'Hatchback', 'Minivan'],
+                onChanged: (val) {
+                  if (val != null) setState(() => _vehicleType = val);
+                },
               ),
             ),
             const SizedBox(width: 12),
