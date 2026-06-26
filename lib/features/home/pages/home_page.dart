@@ -8,6 +8,7 @@ import '../../../core/utils/SnackbarUtil.dart';
 import '../../../core/utils/custom_text.dart';
 import '../../../core/widgets/app_text.dart';
 import '../../Authentication/Pages/SignInPage.dart';
+import '../../offer_ride/pages/OfferRidePage.dart';
 import '../widgets/commute_card.dart';
 import '../widgets/impact_card.dart';
 
@@ -171,7 +172,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Expanded(
                               child: ElevatedButton.icon(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const OfferRidePage(),
+                                    ),
+                                  );
+                                },
                                 icon: const Icon(
                                   Icons.directions_car,
                                   color: Colors.white,

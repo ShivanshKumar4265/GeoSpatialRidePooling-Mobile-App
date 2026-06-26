@@ -12,7 +12,7 @@ part of 'Env.dart';
 final class _Env {
   static const String apiKey = 'gaushala_2025ekdnsEDKDND';
 
-  static const String baseUrl = 'http://165.22.221.254:8089/';
+  static const String baseUrl = 'http://64.227.177.48:8089/';
 
   static const String media_base_url =
       'https://gaushaala.com/application/public/';

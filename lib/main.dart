@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geo_spatial_ride_pooling_system_2/features/Authentication/repository/auth_repo.dart';
 import 'package:geo_spatial_ride_pooling_system_2/features/home/bloc/home_bloc.dart';
 import 'package:geo_spatial_ride_pooling_system_2/features/home/repository/home_repo.dart';
+import 'package:geo_spatial_ride_pooling_system_2/features/offer_ride/bloc/offer_ride_bloc.dart';
 
 import 'core/services/ApiService.dart';
 import 'features/Authentication/bloc/auth_bloc.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<HomeBloc>(
           create: (_) => HomeBloc(HomeRepository(ApiService())),
+        ),
+        BlocProvider<OfferRideBloc>(
+          create: (_) => OfferRideBloc(),
         ),
       ],
       child: MaterialApp(
